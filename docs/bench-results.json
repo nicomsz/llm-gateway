@@ -1,0 +1,168 @@
+{
+  "date": "2026-11-18T20:43:43.419Z",
+  "environment": "Intel(R) Xeon(R) Processor @ 2.10GHz, 2 núcleos, Node v22.23.4, linux",
+  "results": {
+    "A": {
+      "title": "Custo de passar pelo gateway",
+      "setup": "1 provedor falso que responde em 100 ms; 2.000 requests, 20 ao mesmo tempo, depois de 200 de aquecimento.",
+      "rows": [
+        {
+          "caminho": "direto no provedor",
+          "requests": 2000,
+          "erros %": 0,
+          "p50 ms": 102.9,
+          "p99 ms": 113.2,
+          "req/s": 193
+        },
+        {
+          "caminho": "pelo gateway",
+          "requests": 2000,
+          "erros %": 0,
+          "p50 ms": 103.9,
+          "p99 ms": 119.4,
+          "req/s": 189
+        }
+      ]
+    },
+    "B": {
+      "title": "Um provedor fora do ar",
+      "setup": "3 provedores de 100 ms, 1 deles devolvendo 529 em tudo; 150 requests por segundo durante 8 s. Latência só dos requests com sucesso.",
+      "rows": [
+        {
+          "configuração": "round-robin, sem failover",
+          "requests": 1200,
+          "erros %": 33.3,
+          "p50 ms": 104,
+          "p99 ms": 112,
+          "chamadas ao provedor caído": 400
+        },
+        {
+          "configuração": "least-in-flight, sem failover",
+          "requests": 1200,
+          "erros %": 87.2,
+          "p50 ms": 104,
+          "p99 ms": 126,
+          "chamadas ao provedor caído": 1046
+        },
+        {
+          "configuração": "least-in-flight + failover",
+          "requests": 1200,
+          "erros %": 0,
+          "p50 ms": 206,
+          "p99 ms": 303,
+          "chamadas ao provedor caído": 1196
+        },
+        {
+          "configuração": "least-in-flight + failover + circuit breaker",
+          "requests": 1200,
+          "erros %": 0,
+          "p50 ms": 104,
+          "p99 ms": 115,
+          "chamadas ao provedor caído": 8
+        }
+      ]
+    },
+    "C": {
+      "title": "Um provedor travado",
+      "setup": "3 provedores de 100 ms, 1 deles sem responder; tempo limite de 1 s por tentativa; 150 requests por segundo durante 15 s.",
+      "rows": [
+        {
+          "configuração": "sem circuit breaker",
+          "requests": 2250,
+          "erros %": 0,
+          "p50 ms": 104,
+          "p99 ms": 1270,
+          "requests acima de 1 s": 138
+        },
+        {
+          "configuração": "com circuit breaker",
+          "requests": 2250,
+          "erros %": 0,
+          "p50 ms": 104,
+          "p99 ms": 118,
+          "requests acima de 1 s": 16
+        }
+      ]
+    },
+    "D": {
+      "title": "Um tenant barulhento",
+      "setup": "Provedor com capacidade para ~100 requests por segundo. O tenant acme envia 300 por segundo (cota: 6.000 tokens por minuto); o tenant beta envia 20 por segundo em média, em intervalos aleatórios, durante 15 s.",
+      "rows": [
+        {
+          "configuração": "sem rate limit",
+          "beta: requests": 305,
+          "beta: erros %": 75.1,
+          "beta: p50 ms": 1137,
+          "beta: p99 ms": 1154,
+          "acme: atendidos": 1665,
+          "acme: 429": 0,
+          "acme: 503": 3435
+        },
+        {
+          "configuração": "com rate limit",
+          "beta: requests": 305,
+          "beta: erros %": 0,
+          "beta: p50 ms": 104,
+          "beta: p99 ms": 112,
+          "acme: atendidos": 245,
+          "acme: 429": 4855,
+          "acme: 503": 0
+        }
+      ]
+    },
+    "E": {
+      "title": "Cache de respostas",
+      "setup": "1.000 requests, 10 ao mesmo tempo; 30% deles repetem uma de 10 perguntas frequentes (premissa do teste). Custo calculado com um preço de exemplo.",
+      "rows": [
+        {
+          "configuração": "sem cache",
+          "requests": 1000,
+          "chamadas ao provedor": 1000,
+          "respostas do cache %": 0,
+          "custo US$": 0.159,
+          "média ms": 105
+        },
+        {
+          "configuração": "com cache",
+          "requests": 1000,
+          "chamadas ao provedor": 689,
+          "respostas do cache %": 31.1,
+          "custo US$": 0.1095,
+          "média ms": 73
+        }
+      ]
+    },
+    "F": {
+      "title": "Streaming",
+      "setup": "Provedor que envia o primeiro pedaço em 200 ms e depois 20 pedaços de texto, um a cada 50 ms; 300 requests, 20 ao mesmo tempo, depois de 40 de aquecimento.",
+      "rows": [
+        {
+          "caminho": "direto no provedor",
+          "requests": 300,
+          "primeiro pedaço p50 ms": 202,
+          "primeiro pedaço p99 ms": 207,
+          "resposta completa p50 ms": 1208
+        },
+        {
+          "caminho": "pelo gateway",
+          "requests": 300,
+          "primeiro pedaço p50 ms": 203,
+          "primeiro pedaço p99 ms": 221,
+          "resposta completa p50 ms": 1208
+        }
+      ]
+    },
+    "G": {
+      "title": "Cancelamento",
+      "setup": "100 requests com streaming; o cliente fecha a conexão 400 ms depois de enviar. Cada resposta completa teria 20 pedaços de texto.",
+      "rows": [
+        {
+          "requests cancelados": 100,
+          "cancelamentos que chegaram ao provedor": 100,
+          "pedaços que o provedor gerou": 429,
+          "pedaços sem cancelamento": 2000
+        }
+      ]
+    }
+  }
+}
