@@ -1,0 +1,20 @@
+{
+  "port": 3000,
+  "tenants": {
+    "gw_acme_123": { "name": "acme", "tokensPerMinute": 20000 },
+    "gw_beta_456": { "name": "beta", "tokensPerMinute": 5000 }
+  },
+  "upstreams": [
+    { "name": "mock-a", "url": "http://localhost:4001", "apiKey": "chave-falsa" },
+    { "name": "mock-b", "url": "http://localhost:4002", "apiKey": "chave-falsa" },
+    { "name": "mock-c", "url": "http://localhost:4003", "apiKey": "chave-falsa" }
+  ],
+  "strategy": "least-in-flight",
+  "timeouts": { "firstByteMs": 5000, "idleMs": 15000, "totalMs": 30000 },
+  "retry": { "maxAttempts": 3, "baseMs": 200, "capMs": 2000 },
+  "breaker": { "enabled": true, "failureThreshold": 5, "openMs": 10000 },
+  "limiter": { "maxInFlight": 50, "maxQueue": 100, "maxWaitMs": 3000 },
+  "prices": {
+    "mock-1": { "inputPerMTok": 3, "outputPerMTok": 15 }
+  }
+}
