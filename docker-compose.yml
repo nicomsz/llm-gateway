@@ -1,0 +1,8 @@
+# Redis para o rate limit e o cache compartilhados entre várias cópias do gateway.
+#   docker compose up -d
+#   REDIS_URL=redis://localhost:6379 pnpm gateway
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
