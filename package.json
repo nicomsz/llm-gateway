@@ -1,0 +1,47 @@
+{
+  "name": "llm-gateway",
+  "version": "0.1.0",
+  "description": "POC de um gateway de LLM: rate limit por tokens, streaming com cancelamento, failover, circuit breaker, fila e cache, com experimentos de carga.",
+  "keywords": [
+    "llm",
+    "gateway",
+    "system-design",
+    "rate-limiting",
+    "circuit-breaker",
+    "streaming",
+    "sse"
+  ],
+  "author": "Nicolas Moraes de Souza (https://nicomsz.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicomsz/llm-gateway.git"
+  },
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "mocks": "tsx src/mock/three.ts",
+    "gateway": "tsx src/gateway/main.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "bench": "tsx src/bench/run.ts",
+    "report": "tsx src/report.ts"
+  },
+  "dependencies": {
+    "redis": "^6.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
