@@ -236,8 +236,10 @@ docs/resultados.md   saída do último pnpm bench
 
 ## Guia de estudo
 
-Cada conceito deste repositório explicado na ordem em que aparece no caminho do request:
-[guia-do-gateway-de-llm.vercel.app](https://guia-do-gateway-de-llm.vercel.app/).
+As 9 lições de system design que este projeto usa, cada uma com o trecho do código e o
+resultado do experimento correspondente:
+[nicomsz.com/llm-gateway](https://nicomsz.com/llm-gateway/).
+O código da página está em [`guia/`](guia/index.html).
 
 ## Licença
 
