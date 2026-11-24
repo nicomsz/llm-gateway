@@ -238,8 +238,9 @@ docs/resultados.md   saída do último pnpm bench
 
 As 9 lições de system design que este projeto usa, cada uma com o trecho do código e o
 resultado do experimento correspondente:
-[nicomsz.com/llm-gateway](https://nicomsz.com/llm-gateway/).
-O código da página está em [`guia/`](guia/index.html).
+[nicomsz.com/llm-gateway](https://nicomsz.com/llm-gateway/)
+(em inglês: [nicomsz.com/llm-gateway/en](https://nicomsz.com/llm-gateway/en/)).
+O código da página está em [`guia/`](guia/index.html), e a versão em inglês em [`guia/en/`](guia/en/index.html).
 
 ## Licença
 
